@@ -34,6 +34,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -85,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements
 
         // Start the loader
         getSupportLoaderManager().initLoader(LOADER_ID_MESSAGES, null, this);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey("test")) {
+            Toast.makeText(this, extras.getString("test"), Toast.LENGTH_SHORT).show();
+        }
 
     }
 
