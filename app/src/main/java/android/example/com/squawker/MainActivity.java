@@ -38,7 +38,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static String LOG_TAG = MainActivity.class.getSimpleName();
+    private static String LOG_TAG = MainActivity.class.getCanonicalName();
     private static final int LOADER_ID_MESSAGES = 0;
 
     RecyclerView mRecyclerView;

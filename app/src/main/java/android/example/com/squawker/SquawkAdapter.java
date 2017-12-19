@@ -48,8 +48,7 @@ public class SquawkAdapter extends RecyclerView.Adapter<SquawkAdapter.SquawkView
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_squawk_list, parent, false);
 
-        SquawkViewHolder vh = new SquawkViewHolder(v);
-        return vh;
+        return new SquawkViewHolder(v);
     }
 
     @Override
