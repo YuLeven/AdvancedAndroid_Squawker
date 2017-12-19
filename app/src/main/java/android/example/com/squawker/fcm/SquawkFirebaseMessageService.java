@@ -122,14 +122,13 @@ public class SquawkFirebaseMessageService extends FirebaseMessagingService {
                 PendingIntent.FLAG_ONE_SHOT
         );
 
-        String author = mAuthor;
         // Clips the message to it fits the notification bar
         String message = Util.clipString(mMessage, 30);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_duck)
-                .setContentTitle(String.format(getString(R.string.notification_message), author))
+                .setContentTitle(String.format(getString(R.string.notification_message), mAuthor))
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
@@ -141,5 +140,21 @@ public class SquawkFirebaseMessageService extends FirebaseMessagingService {
         if (notificationManager == null) { return; }
 
         notificationManager.notify(0, notificationBuilder.build());
+    }
+
+    /**
+     * This callbacks are here because I'm not entirely sure how Android handles a service lifecycle
+     * I was concerned my property based approach might lead to corrupted data due to the system reusing
+     * the same service for more than one message. Apparently this is not the case and I'm safe here,
+     * but I'll leave those in here so I can further explore this would be bug later.
+     */
+    @Override
+    public void onCreate() {
+        Log.d(LOG_TAG, "Service coming in");
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(LOG_TAG, "Service going away");
     }
 }
