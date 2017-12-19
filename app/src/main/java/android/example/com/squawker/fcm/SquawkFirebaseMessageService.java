@@ -65,6 +65,10 @@ public class SquawkFirebaseMessageService extends FirebaseMessagingService {
         }
     }
 
+    /**
+     * Sets the received squawk data to this class' properties
+     * @param data - A Map<String, String> containing squawk data
+     */
     private void setData(Map<String, String> data) {
         mAuthor = data.get(SquawkContract.COLUMN_AUTHOR);
         mMessage = data.get(SquawkContract.COLUMN_MESSAGE);
@@ -73,7 +77,7 @@ public class SquawkFirebaseMessageService extends FirebaseMessagingService {
     }
 
     /**
-     * Persists a new squak to our SQLite database
+     * Persists a new squawk to our SQLite database
      */
     private void persistSquawk() {
        new Thread(new Runnable() {
