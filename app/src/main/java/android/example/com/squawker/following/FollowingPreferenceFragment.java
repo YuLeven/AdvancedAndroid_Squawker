@@ -15,15 +15,20 @@
 */
 package android.example.com.squawker.following;
 
+import android.content.SharedPreferences;
 import android.example.com.squawker.R;
 import android.os.Bundle;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 /**
  * Shows the list of instructors you can follow
  */
-public class FollowingPreferenceFragment extends PreferenceFragmentCompat {
+public class FollowingPreferenceFragment extends PreferenceFragmentCompat
+    implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private final static String LOG_TAG = FollowingPreferenceFragment.class.getSimpleName();
 
@@ -31,5 +36,36 @@ public class FollowingPreferenceFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Add visualizer preferences, defined in the XML file in res->xml->preferences_squawker
         addPreferencesFromResource(R.xml.following_squawker);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String prefKey) {
+        Preference preference = findPreference(prefKey);
+
+        // Return early if no preferece were found
+        if (preference == null) return;
+
+        boolean isToggled = sharedPreferences.getBoolean(prefKey, false);
+        if (isToggled) {
+            FirebaseMessaging.getInstance().subscribeToTopic(prefKey);
+        } else {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(prefKey);
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Binds the listener
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // Unbinds the listener
+        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 }
